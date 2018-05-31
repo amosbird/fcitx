@@ -678,6 +678,11 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
             if (rec)
             {
                 FcitxInstanceCommitString(instance, rec, imname);
+                FcitxLog(INFO, "Commit string: %s", imname);
+            }
+            else
+            {
+                FcitxLog(INFO, "Frondend is null, cannot commit string");
             }
             reply = dbus_message_new_method_return(msg);
         } else {
