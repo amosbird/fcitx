@@ -36,6 +36,9 @@
     <method name="SetCurrentIM">
       <arg name="im" direction="in" type="s"/>
     </method>
+    <method name="CommitString">
+      <arg name="im" direction="in" type="s"/>
+    </method>
     <method name="ReloadConfig">
     </method>
     <method name="ReloadAddonConfig">

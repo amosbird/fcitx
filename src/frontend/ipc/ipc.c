@@ -179,6 +179,9 @@ const char * im_introspection_xml =
     "<method name=\"SetCurrentIM\">"
     "<arg name=\"im\" direction=\"in\" type=\"s\"/>"
     "</method>"
+    "<method name=\"CommitString\">"
+    "<arg name=\"im\" direction=\"in\" type=\"s\"/>"
+    "</method>"
     "<method name=\"ReloadConfig\">"
     "</method>"
     "<method name=\"ReloadAddonConfig\">"
@@ -661,6 +664,21 @@ static DBusHandlerResult IPCDBusEventHandler(DBusConnection *connection, DBusMes
         char* imname = NULL;
         if (dbus_message_get_args(msg, &error, DBUS_TYPE_STRING, &imname, DBUS_TYPE_INVALID)) {
             FcitxInstanceSwitchIMByName(instance, imname);
+            reply = dbus_message_new_method_return(msg);
+        } else {
+            reply = FcitxDBusPropertyUnknownMethod(msg);
+        }
+        dbus_error_free(&error);
+    } else if (dbus_message_is_method_call(msg, FCITX_IM_DBUS_INTERFACE, "CommitString")) {
+        DBusError error;
+        dbus_error_init(&error);
+        char* imname = NULL;
+        if (dbus_message_get_args(msg, &error, DBUS_TYPE_STRING, &imname, DBUS_TYPE_INVALID)) {
+            FcitxInputContext *rec = FcitxInstanceGetCurrentIC(instance);
+            if (rec)
+            {
+                FcitxInstanceCommitString(instance, rec, imname);
+            }
             reply = dbus_message_new_method_return(msg);
         } else {
             reply = FcitxDBusPropertyUnknownMethod(msg);

@@ -49,6 +49,9 @@ static const gchar introspection_xml[] =
     "    <method name=\"SetCurrentIM\">\n"
     "      <arg name=\"im\" direction=\"in\" type=\"s\"/>\n"
     "    </method>\n"
+    "    <method name=\"CommitString\">\n"
+    "      <arg name=\"im\" direction=\"in\" type=\"s\"/>\n"
+    "    </method>\n"
     "    <method name=\"ReloadConfig\">\n"
     "    </method>\n"
     "    <method name=\"Restart\">\n"
@@ -590,6 +593,20 @@ void fcitx_input_method_restart(FcitxInputMethod *im) {
 FCITX_EXPORT_API
 void fcitx_input_method_set_current_im(FcitxInputMethod *im, gchar *imname) {
     g_dbus_proxy_call(G_DBUS_PROXY(im), "SetCurrentIM",
+                      g_variant_new("(s)", imname),
+                      G_DBUS_CALL_FLAGS_NO_AUTO_START, 0, NULL, NULL, NULL);
+}
+
+/**
+ * fcitx_input_method_commit_string:
+ * @im: A #FcitxInputMethod
+ * @imname: (transfer none): commit string
+ *
+ * Commit string
+ **/
+FCITX_EXPORT_API
+void fcitx_input_method_commit_string(FcitxInputMethod *im, gchar *imname) {
+    g_dbus_proxy_call(G_DBUS_PROXY(im), "CommitString",
                       g_variant_new("(s)", imname),
                       G_DBUS_CALL_FLAGS_NO_AUTO_START, 0, NULL, NULL, NULL);
 }

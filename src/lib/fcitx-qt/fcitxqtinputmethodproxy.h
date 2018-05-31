@@ -205,6 +205,13 @@ public Q_SLOTS: // METHODS
         return asyncCallWithArgumentList(QLatin1String("SetCurrentIM"), argumentList);
     }
 
+    inline QDBusPendingReply<> CommitString(const QString &im)
+    {
+        QList<QVariant> argumentList;
+        argumentList << QVariant::fromValue(im);
+        return asyncCallWithArgumentList(QLatin1String("CommitString"), argumentList);
+    }
+
     inline QDBusPendingReply<> ToggleIM()
     {
         QList<QVariant> argumentList;
