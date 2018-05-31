@@ -75,6 +75,7 @@ void usage(FILE* fp)
             "\t-r\t\treload fcitx config\n"
             "\t-t,-T\t\tswitch Active/Inactive\n"
             "\t-s <imname>\tswitch to the input method uniquely identified by <imname>\n"
+            "\t-w <text>\tsend <text> via fcitx\n"
             "\t[no option]\tdisplay fcitx state, %d for close, %d for inactive, %d for acitve\n"
             "\t-h\t\tdisplay this help and exit\n",
             IS_CLOSED, IS_INACTIVE, IS_ACTIVE);
@@ -89,7 +90,7 @@ int main(int argc, char *argv[])
     char c;
     char* imname = 0;
 
-    while ((c = getopt(argc, argv, "chortTs:")) != -1) {
+    while ((c = getopt(argc, argv, "chortTs:w:")) != -1) {
         switch (c) {
         case 'o':
             o = 1;
@@ -111,6 +112,11 @@ int main(int argc, char *argv[])
 
         case 's':
             o = 4;
+            imname = optarg;
+            break;
+
+        case 'w':
+            o = 5;
             imname = optarg;
             break;
 
@@ -140,7 +146,7 @@ int main(int argc, char *argv[])
         int buf;
         read(socket_fd, &buf, sizeof(buf));
         printf("%d\n", buf);
-    } else if (o == 4) {
+    } else if (o == 4 || o == 5) {
        write(socket_fd, imname, strlen(imname));
     }
     close(socket_fd);

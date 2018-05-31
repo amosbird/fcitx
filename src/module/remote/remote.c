@@ -181,6 +181,17 @@ static void RemoteProcessEvent(void* p)
         FcitxInstanceSwitchIMByName(remote->owner, imname);
         break;
     }
+    case 5: {
+        char buf[1024];
+        int n = read(client_fd, buf, 1023);
+        buf[n] = '\0';
+        FcitxInputContext *rec = FcitxInstanceGetCurrentIC(remote->owner);
+        if (rec)
+        {
+            FcitxInstanceCommitString(remote->owner, rec, buf);
+        }
+        break;
+    }
     default:
         break;
         /// }}}
